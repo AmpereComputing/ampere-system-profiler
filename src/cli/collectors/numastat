@@ -1,0 +1,37 @@
+# Copyright (c) 2025, Ampere Computing LLC.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+#!/bin/bash
+
+interval=${1}
+sample_count=${2}
+output_dir=${3}
+TOTAL_TIME=$(("${interval}" * "${sample_count}"))
+
+echo "Collecting NUMA imbalance data"
+sleep_pid=
+
+post_process()
+{
+	#echo "Exit numastat"
+	numastat | awk 'NR==1{print "node_type\t" $0} $0~/_node/{print}' > "${output_dir}/numastat_end.dat"
+	if [[ ${sleep_pid} ]]; then
+	       	kill "${sleep_pid}"
+	fi
+}
+
+trap post_process SIGINT SIGTERM
+
+#check for output directory
+if [ -z "$output_dir" ]; then
+        output_dir=$(pwd)
+fi
+if [ "${NUMASTAT_NOT_FOUND}" != "1" ]
+then
+	numastat | awk 'NR==1{print "node_type\t" $0} $0~/_node/{print}' > "${output_dir}/numastat_start.dat"
+	sleep $TOTAL_TIME & sleep_pid=$!
+	wait
+	sleep_pid=
+	numastat | awk 'NR==1{print "node_type\t" $0} $0~/_node/{print}' > "${output_dir}/numastat_end.dat"
+fi

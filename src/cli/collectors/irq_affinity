@@ -1,0 +1,24 @@
+# Copyright (c) 2025, Ampere Computing LLC.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+#!/bin/bash
+
+interval=${1}
+sample_count=${2}
+output_dir=${3}
+network_interface=${4}
+#check for output directory
+if [ -z "$output_dir" ]; then
+        output_dir=$(pwd)
+fi
+if [ -z "${network_interface}" ]
+then
+        #need to find the default network
+	network_interface=$(route | grep '^default' | grep -o '[^ ]*$')
+fi
+
+echo "Collecting data on network IRQ affinity"
+CPUS=$(grep -ic processor /proc/cpuinfo)
+grep -i "${network_interface}" /proc/interrupts | awk -v cpus="${CPUS}" '{for (i=1; i<=cpus; i++) arr[i]+=$i;}END{for(j=1; j<=cpus; j++) printf "%i\t", arr[j]; printf "\n"; }' > "${output_dir}/irq.dat"
+

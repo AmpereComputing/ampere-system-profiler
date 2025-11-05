@@ -1,0 +1,17 @@
+# Copyright (c) 2025, Ampere Computing LLC.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+#!/bin/bash
+
+interval=${1}
+sample_count=${2}
+output_dir=${3}
+
+#check for output directory
+if [ -z "$output_dir" ]; then
+        output_dir=$(pwd)
+fi
+echo collecting CPU power data
+for (( i=1; i <=sample_count; i++ )); do sensors | grep "W" | awk -F ":" 'BEGIN {ORS = " "; "date +\"%H:%M:%S\"" | getline out; printf "%s", out; sum = 0;}{val = $2 + 0;printf "\t%.2f", val;sum += val;}END {printf "\t %.2f\n", sum;}'  >> "${output_dir}/cpu_power.dat" ; sleep "${interval}"; done
+

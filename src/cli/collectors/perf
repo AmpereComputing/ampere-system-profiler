@@ -1,0 +1,22 @@
+# Copyright (c) 2025, Ampere Computing LLC.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+#!/bin/bash
+
+interval=${1}
+sample_count=${2}
+output_dir=${3}
+perf_frequency=${4}
+perf_disabled=${5}
+TOTAL_TIME=$((interval*sample_count))
+
+#check for output directory
+if [ -z "$output_dir" ]; then
+        output_dir=$(pwd)
+fi
+if [ "${perf_disabled}" != "1" ]
+then
+	echo "Collecting perf profile"
+	perf record -F "${perf_frequency}" -a -e cycles -o "${output_dir}/perf.dat" sleep "${TOTAL_TIME}"
+fi

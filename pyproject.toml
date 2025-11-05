@@ -1,0 +1,47 @@
+#[project]
+[tool.poetry]
+name = "ampere-system-profiler"
+version = "1.0.0"
+description = "A python package for running Ampere System Profiler CLI"
+authors = [
+	"David Zeng", "xiaohua.zeng@amperecomputing.com",
+	"Karan Kamatgi","krkamatgi@amperecomputing.com",
+	"Luke Johansen","ljohansen@amperecomputing.com",
+	"Mrinal Kshirsagar", "mrinalk@amperecomputing.com",
+	"Naren Nayak","naren@amperecomputing.com",
+	"Tito Reinhart","treinhart@amperecomputing.com",
+	"Travis Lazar","travis@amperecomputing.com",
+]
+readme = "README.md"
+packages = [{include = "cli", from = "src"}]
+include = [
+        "src/cli/plot.py",
+        "src/cli/collectors/**"
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+click = "^8.1.8"
+numpy = "*"
+pandas = "*"
+plotly = "*"
+ArgumentParser = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.1"
+black = "^24.3.0"
+flake8 = "^7.0.0"
+mypy = "^1.10.0"
+isort = "^5.13.2"
+pytest-cov = "^5.0.0"
+pytest-console-scripts = "^1.4.1"
+bandit = "^1.8.5"
+ruff = "^0.4"
+
+[tool.poetry.scripts]
+asp = 'cli.asp:main'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+

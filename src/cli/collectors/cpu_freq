@@ -1,0 +1,48 @@
+# Copyright (c) 2025, Ampere Computing LLC.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+#!/bin/bash
+
+interval=${1}
+sample_count=${2}
+output_dir=${3}
+system_architecture=${4}
+NUM_PROCS=$(nproc)
+
+post_process()
+{
+	# construct perf-core consolidated data
+	echo -e "CPU\tFrequency" > "${output_dir}/cpu_freq_consolidated.dat"
+	for (( i=1; i<=NUM_PROCS; i++ ))
+	do
+        	awk -v col=${i} 'BEGIN{OFS="\t"}{if (NR!=0){avg=avg+$col}}END{printf("%d\t%d \n", col-1, avg/(NR-1));}' "${output_dir}/cpu_freq.dat" >> "${output_dir}/cpu_freq_consolidated.dat"
+	done
+}
+
+trap post_process EXIT SIGINT SIGTERM
+
+#check for output directory
+if [ -z "$output_dir" ]; then
+        output_dir=$(pwd)
+fi
+echo "Collecting CPU frequency data"
+for (( i=0; i < NUM_PROCS; i++ ))
+do
+	STR=$(echo -e "${STR}\t${i}")
+done
+echo "${STR}" > "${output_dir}/cpu_freq.dat"
+
+for (( i=1; i <= sample_count; i++ ))
+do
+	if [ ${system_architecture} != "x86_64" ] 
+	then
+		ls /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq -v | xargs cat | column -c 10000 >> "${output_dir}/cpu_freq.dat"
+		sleep "${interval}"
+	else
+		ls /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq -v | xargs cat | column -c 10000 >> "${output_dir}/cpu_freq.dat"
+                sleep "${interval}"
+	fi
+done
+sync
+
