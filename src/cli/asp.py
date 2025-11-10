@@ -1,6 +1,5 @@
 ###########################################################################
 # Copyright (c) 2025, Ampere Computing LLC
-# Ampere Computing LLC Proprietary and Confidential
 #
 # SPDX-License-Identifier: BSD-3-Clause
 # License terms can be found in the LICENSE.TXT file at the root of this project.

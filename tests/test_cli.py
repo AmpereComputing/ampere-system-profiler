@@ -1,6 +1,9 @@
-# Copyright (c) 2025, Ampere Computing LLC.
+###########################################################################
+# Copyright (c) 2025, Ampere Computing LLC
 #
 # SPDX-License-Identifier: BSD-3-Clause
+# License terms can be found in the LICENSE.TXT file at the root of this project.
+###########################################################################
 
 import subprocess
 import shutil

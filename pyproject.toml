@@ -1,6 +1,7 @@
 #[project]
 [tool.poetry]
 name = "ampere-system-profiler"
+license = "BSD-3-Clause"
 version = "1.0.0"
 description = "A python package for running Ampere System Profiler CLI"
 authors = [
