@@ -4,6 +4,8 @@ The Ampere System Profiler (ASP) is a system-level analysis profiler that can be
 ASP can be used for workload characterization at a system level, a first step towards a balanced platform. 
 
 ## System pre-Requisites
+Assumes user is running as root or had root privileges
+
 Required Commands
  - sar
  - sensors
