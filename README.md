@@ -41,6 +41,13 @@ The report includes:
 - NUMA Stats
 - Top CPU Hotspots
 
+## Example Report
+
+
+<p align="center">
+  <img src="images/Sample-Profile.png" alt="Sample Report" width="900" length="1200" title="Main screen of the application">
+</p>
+
 ## Getting Started
 
 ### 1. Clone the Repository
